@@ -10,11 +10,15 @@ Eerst download [RPI imager](https://www.raspberrypi.com/software/) voor uw opera
 
 Ga naar de [DietPi Website](https://dietpi.com/#downloadinfo) en neem de download die aangeduid is. Expand het van .img.xz naar .img.  
 
-![image](afbeeldingen/dietpi_download.jpeg) 
+![image](afbeeldingen/dietpi_download.jpeg){width=300} 
 
-In RPI Imager, ga naar custom en zoek naar je .img bestand. Klik op "Edit Settings" nadat je je SD kaart hebt geselecteerd. 
+In RPI Imager, ga naar "custom" en zoek naar je .img bestand. 
 
-![image](afbeeldingen/dietpi_flashing.jpeg)
+![image](afbeeldingen/custom.jpeg) {width=300}
+
+Klik op "Edit Settings" nadat je je SD kaart hebt geselecteerd. 
+
+![image](afbeeldingen/dietpi_flashing.jpeg){width=250}
 
 Ga dan ook naar SERVICES -> Enable SSH (met wachtwoord). Dan klik `SAVE` en `YES`. DietPi wordt geinstalleerd op je SD kaart, en dan kan het in de RPI02W.
 
