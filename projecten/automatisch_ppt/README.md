@@ -75,7 +75,9 @@ Wachtwoord is dietpi, of iets anders als je het veranderd hebt.
 LibreOffice is een sneller versie van MicrosoftOffice, gemaakt voor Linux devices. Typ de volgende commando in de LXTerminal om het te installeren. 
 
 ```
-sudo apt install libreoffice
+sudo apt install libreoffice -y
+sudo apt install libreoffice-gtk3 libxrender1 libfontconfig1 libdbus-glib-1-2 -y
+
 ```
 
 ## Veranderen van achtergrond
@@ -230,9 +232,18 @@ This should successfully download your Google Doc! Let me know if you run into i
 
 Gebruik de install_fonts.sh script in deze repo. Het zal meer dan 1G fonts downloaden en installen, dus maak dat het internet goed is. 
 
+Ik heb nu een kelienere file gemaakt.
+
 ## Veranderingen aan ppt zodat het automatisch speelt. 
 
 Dit hebben wij in de scripts die een gedeelte van deze repo zijn.
+
+Update_ppt.sh 
+
+```
+sudo apt install net-tools
+sudo apt install default-jre libreoffice-java-common
+```
 
 ## Opzetten van automatisch service met script en .service bestand. 
 
@@ -241,7 +252,7 @@ Dezelfde als wij bij de andere rpi gedaan hebben. Commandos van de andere pi:
 ```
 sudo mkdir /etc/startup_scripts # replace
 sudo nano /etc/systemd/system/automatic_ppt.service
-sudo chmod a+x automatic_ppt.sh
+sudo chmod a+x /etc/startup_scripts/automatic_ppt.sh
 
 sudo systemctl enable automatic_ppt.service
 sudo systemctl start automatic_ppt.service
