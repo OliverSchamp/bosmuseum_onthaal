@@ -1,0 +1,11 @@
+[Unit]
+Description=Button Monitor Reload PPT Service
+After=network.target
+
+[Service]
+ExecStart=/etc/startup_scripts/reload_ppt.sh
+Restart=always
+User=dietpi  # Run as the dietpi user (or adjust as needed)
+
+[Install]
+WantedBy=multi-user.target
