@@ -4,4 +4,6 @@
 
 Code en uitleg voor projecten te maken met de onthaal van Bosmuseum Jan van Ruusbroec.
 
-Dit repository is gedeeld in 3 secties, een automatisch powerpoint voor het onthaal, een toestel die geluid zou maken als je op een knop drukt, en ook en camera toestel waar een film naar een web server wordt gestuurd.
+Dit repository is gedeeld in 3 secties, een automatisch powerpoint voor het onthaal, een toestel die geluid zou maken als je op een knop drukt, en ook en camera toestel waar een film naar een web server wordt gestuurd. 
+
+De Raspberry Pi Zero wordt gebruikt, met verschillende Operating Systemen afhangkelijk van taak. 
