@@ -114,18 +114,147 @@ De presentatie link heb je ergens. Dit gebruik je om de presentatie te downloade
 curl -L "https://docs.google.com/presentation/d/<GOOGLE_DOC_ID>/export/odp" -o /path/to/output_file.odp
 ```
 
+Maar hier moet je eerst authenticaten. Ga naar [google cloud console](console.cloud.google.com). Maak een nieuw project aan. 
+
+To download a Google Doc using `curl` with OAuth 2.0 authentication from the command line, you need to obtain an access token and include it in your `curl` request. Google Docs requires OAuth 2.0 for authentication when accessing private documents programmatically. Below is a step-by-step guide to authenticate and download the file: 
+
+### Step 1: Set Up OAuth 2.0 Credentials
+1. **Go to the Google Cloud Console**:
+   - Navigate to [console.cloud.google.com](https://console.cloud.google.com).
+   - Create a new project or select an existing one.
+
+2. **Enable the Google Drive API**:
+   - Go to "APIs & Services" > "Library."
+   - Search for "Google Drive API" and enable it.
+
+3. **Create OAuth 2.0 Credentials**:
+   - Go to "APIs & Services" > "Credentials."
+   - Click "Create Credentials" > "OAuth 2.0 Client IDs."
+   - Select "Desktop app" as the application type (since you're using the command line).
+   - Name your client and click "Create."
+   - Download the JSON file containing your `client_id` and `client_secret`.
+
+4. **Note the Redirect URI**:
+   - For command-line usage, Google historically supported `urn:ietf:wg:oauth:2.0:oob` as a redirect URI, but this is now deprecated. Instead, use `http://localhost` or `http://127.0.0.1` and manually handle the authorization code.
+
+### Step 2: Get an Authorization Code
+1. **Construct the Authorization URL**:
+   Replace `<CLIENT_ID>` and `<SCOPE>` in the following URL with your values:
+   ```
+   https://accounts.google.com/o/oauth2/v2/auth?client_id=<CLIENT_ID>&redirect_uri=http://127.0.0.1&scope=<SCOPE>&response_type=code&access_type=offline
+   ```
+   - `<CLIENT_ID>`: From the JSON file.
+   - `<SCOPE>`: Use `https://www.googleapis.com/auth/drive.readonly` for read-only access to Google Drive (which includes Docs).
+   - `access_type=offline` ensures you get a refresh token (optional but useful).
+
+2. **Open the URL in a Browser**:
+   - Paste the URL into a browser where you're logged into your Google account.
+   - Approve the permissions.
+   - The browser will redirect to `http://127.0.0.1` with a `code` parameter in the URL (e.g., `http://127.0.0.1/?code=4/0AX...`). Copy this code. If you see a "This site can’t be reached" error, that's fine—just grab the code from the address bar.
+
+### Step 3: Exchange the Authorization Code for an Access Token
+1. **Use `curl` to Get the Token**:
+   Run the following command, replacing `<CLIENT_ID>`, `<CLIENT_SECRET>`, and `<CODE>` with your values:
+   ```
+   curl -X POST \
+   -d "code=<CODE>&client_id=<CLIENT_ID>&client_secret=<CLIENT_SECRET>&redirect_uri=http://127.0.0.1&grant_type=authorization_code" \
+   https://oauth2.googleapis.com/token
+   ```
+   - `<CODE>`: The code from the browser URL.
+   - `<CLIENT_SECRET>`: From the JSON file.
+
+2. **Response**:
+   You’ll receive a JSON response like this:
+   ```
+   {
+     "access_token": "ya29...",
+     "expires_in": 3599,
+     "refresh_token": "1//...",
+     "scope": "https://www.googleapis.com/auth/drive.readonly",
+     "token_type": "Bearer"
+   }
+   ```
+   Save the `access_token` (and optionally the `refresh_token` for later use).
+
+### Step 4: Download the Google Doc with `curl`
+1. **Get the File ID**:
+   - Open the Google Doc in your browser. The URL will look like `https://docs.google.com/document/d/<FILE_ID>/edit`. Copy the `<FILE_ID>`.
+
+2. **Use `curl` to Download**:
+   Use the access token in the `Authorization` header to download the file. Google Docs can be exported in various formats (e.g., PDF, DOCX). For example, to download as a PDF:
+   ```
+   curl -L -H "Authorization: Bearer <ACCESS_TOKEN>" \
+   "https://www.googleapis.com/drive/v3/files/<FILE_ID>/export?mimeType=application/pdf" \
+   -o output.pdf
+   ```
+   - `<ACCESS_TOKEN>`: The token from Step 3.
+   - `<FILE_ID>`: The ID from the URL.
+   - `mimeType`: Options include `application/pdf`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document` (DOCX), `text/plain`, etc.
+   - `-o output.pdf`: Saves the file as `output.pdf`.
+
+### Notes
+- **Token Expiration**: The access token expires in about 1 hour (3599 seconds). Use the refresh token to get a new one if needed:
+  ```
+  curl -X POST \
+  -d "client_id=<CLIENT_ID>&client_secret=<CLIENT_SECRET>&refresh_token=<REFRESH_TOKEN>&grant_type=refresh_token" \
+  https://oauth2.googleapis.com/token
+  ```
+- **Scope**: Ensure the scope matches your needs. `drive.readonly` is sufficient for downloading, but use `drive` for full access if required.
+- **Error Handling**: If you get a `401 Unauthorized` error, verify the token is valid and the scope includes Drive access.
+
+### Full Example
+Assuming:
+- `CLIENT_ID=your-client-id.apps.googleusercontent.com`
+- `CLIENT_SECRET=your-secret`
+- `CODE=4/0AX...`
+- `ACCESS_TOKEN=ya29...`
+- `FILE_ID=your-file-id`
+
+1. Get the token:
+   ```
+   curl -X POST \
+   -d "code=4/0AX...&client_id=your-client-id.apps.googleusercontent.com&client_secret=your-secret&redirect_uri=http://127.0.0.1&grant_type=authorization_code" \
+   https://oauth2.googleapis.com/token
+   ```
+
+2. Download as PDF:
+   ```
+   curl -L -H "Authorization: Bearer ya29..." \
+   "https://www.googleapis.com/drive/v3/files/your-file-id/export?mimeType=application/pdf" \
+   -o mydoc.pdf
+   ```
+
+This should successfully download your Google Doc! Let me know if you run into issues.
+
+### Installeren van fonts
+
+Gebruik de install_fonts.sh script in deze repo. Het zal meer dan 1G fonts downloaden en installen, dus maak dat het internet goed is. 
+
 ## Veranderingen aan ppt zodat het automatisch speelt. 
 
-Hier moeten wij iets in code schrijven... maar voordien maken dat een knop de ppt download op de pi. 
+Dit hebben wij in de scripts die een gedeelte van deze repo zijn.
 
 ## Opzetten van automatisch service met script en .service bestand. 
 
-## Commandos die worden uitgevoerd om zeker te maken dat de ppt aan het runnen is. 
+Dezelfde als wij bij de andere rpi gedaan hebben. Commandos van de andere pi: 
+
+```
+sudo mkdir /etc/startup_scripts # replace
+sudo nano /etc/systemd/system/automatic_ppt.service
+sudo chmod a+x automatic_ppt.sh
+
+sudo systemctl enable automatic_ppt.service
+sudo systemctl start automatic_ppt.service
+systemctl is-enabled automatic_ppt
+systemctl daemon-reload
+```
 
 ## Maken van circuit met knop om een nieuwe ppt te downloaden van google docs. 
 
 Misschien ook leds voor gelukt of niet gelukt. 
 
 ## Programmeren van file voor I/O. 
+
+Gebruik de python file.
 
 ## Stoppen van de automatisch ppt en de trekken van de nieuwe ppt van de google docs. 
