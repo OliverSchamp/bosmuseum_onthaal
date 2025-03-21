@@ -1,18 +1,14 @@
 #!/bin/bash
 
 # Variables
-SOURCE_URL="https://your.google.docs.url/presentation.odp"  # Replace with your Google Docs download URL
-LOCAL_FILE="/home/user/presentation.odp"  # Destination path
-PYTHON_SCRIPT="/home/user/modify_presentation.py"  # Path to Python script
-
-# Download the presentation from Google Docs
-wget -O "$LOCAL_FILE" "$SOURCE_URL" || { echo "Download failed"; exit 1; }
+LOCAL_FILE="/home/dietpi/Desktop/bosmuseum_onthaal_tv1.odp"  # Destination path
+PYTHON_SCRIPT="/home/dietpi/bosmuseum_onthaal/projecten/automatisch_ppt/modify_presentation.py"  # Path to Python script
 
 # Start LibreOffice in the background with a listener for UNO API
 libreoffice --headless --accept="socket,host=localhost,port=2002;urp;" &
 
 # Wait briefly for LibreOffice to start
-sleep 5
+sleep 15
 
 # Modify the presentation using the Python script
 python3 "$PYTHON_SCRIPT" "$LOCAL_FILE" || { echo "Modification failed"; exit 1; }
@@ -21,4 +17,4 @@ python3 "$PYTHON_SCRIPT" "$LOCAL_FILE" || { echo "Modification failed"; exit 1; 
 pkill -f "libreoffice --headless"
 
 # Play the modified presentation
-libreoffice --impress --show "$LOCAL_FILE"
+libreoffice --impress --norestore --show "$LOCAL_FILE"

@@ -1,6 +1,10 @@
+print("started python script")
+
 import uno
 from com.sun.star.beans import PropertyValue
 from com.sun.star.uno import Exception as UnoException
+
+print("finished importing")
 
 def modify_presentation(file_path):
     # Connect to LibreOffice in headless mode
@@ -25,7 +29,7 @@ def modify_presentation(file_path):
         slide.Duration = 5  # 5 seconds wait before next slide
 
     # Set presentation to loop indefinitely
-    presentation_settings = doc.getPresentationSettings()
+    presentation_settings = doc.getPresentation()
     presentation_settings.IsEndless = True  # Loop indefinitely
     presentation_settings.Pause = 0  # No delay between loops
 
