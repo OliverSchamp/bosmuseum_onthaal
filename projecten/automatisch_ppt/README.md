@@ -54,9 +54,19 @@ Gebruik de spacebar om het te selecteren van de lijst, en dan confirm (enter). D
 
 ![image](afbeeldingen/lxde_select.jpeg)
 
-Je moet geen web browser installeren. Ga naar `dietpi-launcher`, `DietPi-Config`, `Autostart Options` en selecteer `Automatic login` in de `Desktops`. `dietpi` moet de user zijn. 
+Je moet geen web browser installeren. Ga naar `dietpi-launcher`, `DietPi-Config`, `Autostart Options` en selecteer `Automatic login` in de `Desktops`. `root` moet de user zijn. 
+
+Dan `sudo nano /etc/systemd/system/getty@tty1.service.d/dietpi-autologin.conf` en verander van root naar dietpi. 
 
 Nadat de install gedaan is, `reboot`. 
+
+Ook omdat het traag opstart:
+
+```
+AUTO_SETUP_BOOT_WAIT_FOR_NETWORK=0
+
+CONFIG_NTP_MODE=0
+```
 
 ### Remote verbinden met RPI
 
@@ -255,17 +265,85 @@ sudo nano /etc/systemd/system/automatic_ppt.service
 sudo chmod a+x /etc/startup_scripts/automatic_ppt.sh
 
 sudo systemctl enable automatic_ppt.service
+systemctl daemon-reload
+
 sudo systemctl start automatic_ppt.service
 systemctl is-enabled automatic_ppt
-systemctl daemon-reload
 ```
 
 ## Maken van circuit met knop om een nieuwe ppt te downloaden van google docs. 
 
-Misschien ook leds voor gelukt of niet gelukt. 
-
-## Programmeren van file voor I/O. 
-
-Gebruik de python file.
+```
+sudo apt -y install python3-rpi.gpio
+``` 
 
 ## Stoppen van de automatisch ppt en de trekken van de nieuwe ppt van de google docs. 
+
+Dit gebruikt een script die niet op deze github staat, omdat het mijn acces waardes heeft. Dit is enkel local toegangkelijk (via USB). 
+
+## Automatisch service voor de knop copieren
+```
+sudo cp bosmuseum/projecten/automatisch_ppt/monitor_button.service /etc/systemd/system/monitor_button.service
+systemctl enable monitor_button
+systemctl daemon-reload
+systemctl start monitor_button
+```
+
+## Ethernet stopping
+
+DietPi’s default behavior is to wait for a network connection (like Ethernet) during boot, which can cause a delay (e.g., your 50-second timeout) if no Ethernet cable is connected. To disable this Ethernet check and speed up the boot process when no cable is inserted, you can tweak the network configuration. Here’s how:
+
+### Solution: Disable Ethernet Wait on Boot
+1. **Edit `dietpi.txt` on the Boot Partition**:
+   - Before booting, access the microSD card’s boot partition (e.g., on a computer).
+   - Open `dietpi.txt` in a text editor.
+   - Find or add these lines:
+     ```
+     AUTO_SETUP_NET_ETHERNET_ENABLED=0
+     AUTO_SETUP_NET_WIFI_ENABLED=1  # Optional, if you use WiFi
+     ```
+   - Setting `AUTO_SETUP_NET_ETHERNET_ENABLED=0` disables Ethernet checks by default. If you’re using WiFi, ensure WiFi is enabled and configured (e.g., via `dietpi-wifi.txt`).
+
+2. **Adjust Systemd Network Wait Timeout**:
+   - If the delay persists or you’ve already booted, you can reduce the network wait timeout.
+   - SSH into DietPi (or use a terminal if accessible) and edit the `dhcpcd` service:
+     ```bash
+     sudo systemctl edit dhcpcd
+     ```
+   - Add this override configuration:
+     ```
+     [Service]
+     TimeoutStartSec=5
+     ```
+   - Save and exit (Ctrl+O, Enter, Ctrl+X in `nano`). This sets the timeout to 5 seconds instead of 50.
+   - Reload systemd and restart the service:
+     ```bash
+     sudo systemctl daemon-reload
+     sudo systemctl restart dhcpcd
+     ```
+
+3. **Disable Network Wait Entirely (Optional)**:
+   - If you don’t need network connectivity at boot (e.g., for a standalone setup), disable the wait entirely:
+     ```bash
+     sudo systemctl disable dhcpcd
+     ```
+   - Note: This stops automatic network configuration on boot. You’d need to manually start it later if needed (`sudo systemctl start dhcpcd`).
+
+### Test It
+- Reboot without an Ethernet cable:
+  ```bash
+  sudo reboot
+  ```
+- Check boot time with:
+  ```bash
+  systemd-analyze
+  ```
+- If it’s still slow, look at the boot log for clues:
+  ```bash
+  journalctl -b
+  ```
+
+### Why This Happens
+DietPi uses `dhcpcd` to manage network interfaces, and by default, it waits for an Ethernet connection if it’s enabled. When no cable is detected, it times out (50 seconds in your case). Disabling Ethernet in `dietpi.txt` or shortening the timeout fixes this.
+
+Let me know if it works or if you need further tweaks!
