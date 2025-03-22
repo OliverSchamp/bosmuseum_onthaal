@@ -1,13 +1,15 @@
 [Unit]
 Description=Automatic PPT Startup Script
-After=multi-user.target
+Requires=graphical.target
+Wants=graphical.target
 
 [Service]
 Type=simple
 Environment=DISPLAY=:0
-ExecStartPre=/usr/bin/xhost +SI:localuser:pi
+ExecStartPre=/bin/bash -c 'until xset q >/dev/null 2>&1; do sleep 1; done'
+ExecStartPre=/usr/bin/xhost +SI:localuser:dietpi
 ExecStart=/home/dietpi/bosmuseum_onthaal/projecten/automatisch_ppt/startup_scripts/automatic_ppt.sh
-User=pi
+User=dietpi
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target
