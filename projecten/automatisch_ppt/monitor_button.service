@@ -1,11 +1,12 @@
 [Unit]
 Description=Button Monitor Reload PPT Service
-After=multi_user.target
+After=multi-user.target
 
 [Service]
-ExecStart=python3 /home/dietpi/bosmuseum_onthaal/projecten/automatisch_ppt/monitor_button.py
+Type=simple
+ExecStart=/usr/bin/python3 /home/dietpi/bosmuseum_onthaal/projecten/automatisch_ppt/monitor_button.py
 Restart=always
-User=dietpi  # Run as the dietpi user (or adjust as needed)
+#User=dietpi  # Run as the dietpi user (or adjust as needed)
 
 [Install]
 WantedBy=multi-user.target
