@@ -1,9 +1,9 @@
 [Unit]
 Description=Button Monitor Reload PPT Service
-After=network.target
+After=multi_user.target
 
 [Service]
-ExecStart=/etc/startup_scripts/reload_ppt.sh
+ExecStart=python3 /home/dietpi/bosmuseum_onthaal/projecten/automatisch_ppt/monitor_button.py
 Restart=always
 User=dietpi  # Run as the dietpi user (or adjust as needed)
 

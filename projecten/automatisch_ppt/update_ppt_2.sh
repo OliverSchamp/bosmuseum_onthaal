@@ -36,4 +36,6 @@ sleep 5
 echo "Opening the modified presentation..."
 libreoffice --impress --norestore --show "$LOCAL_FILE" &
 
+sudo systemctl restart automatic_ppt
+
 echo "Script completed."
