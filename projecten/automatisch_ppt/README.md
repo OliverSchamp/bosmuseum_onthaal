@@ -276,6 +276,11 @@ systemctl is-enabled automatic_ppt
 ```
 sudo apt -y install python3-rpi.gpio
 ``` 
+Gebruik de `monitor_button.service` start `monitor_button.py`. Hier kijken we of onze oranje draag hoog gaat, en als het hoog gaat runnen wij `pull_ppt.sh` en daarna `update_ppt.sh`.
+
+De 3.3V pin is pin 1, de GND is pin 6, en de I/O is pin 11.
+
+![image](afbeeldingen/button_circuit.jpeg)
 
 ## Stoppen van de automatisch ppt en de trekken van de nieuwe ppt van de google docs. 
 
@@ -289,7 +294,7 @@ systemctl daemon-reload
 systemctl start monitor_button
 ```
 
-## Ethernet stopping
+## Ethernet stoppen om RPI sneller te laten booten
 
 DietPi’s default behavior is to wait for a network connection (like Ethernet) during boot, which can cause a delay (e.g., your 50-second timeout) if no Ethernet cable is connected. To disable this Ethernet check and speed up the boot process when no cable is inserted, you can tweak the network configuration. Here’s how:
 
