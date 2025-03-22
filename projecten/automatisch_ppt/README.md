@@ -229,26 +229,20 @@ Assuming:
    https://oauth2.googleapis.com/token
    ```
 
-2. Download as PDF:
-   ```
-   curl -L -H "Authorization: Bearer ya29..." \
-   "https://www.googleapis.com/drive/v3/files/your-file-id/export?mimeType=application/pdf" \
-   -o mydoc.pdf
-   ```
+2. Download as ODP:
+   See `pull_ppt_without_credentials.sh`.
 
 This should successfully download your Google Doc! Let me know if you run into issues.
 
 ### Installeren van fonts
 
-Gebruik de install_fonts.sh script in deze repo. Het zal meer dan 1G fonts downloaden en installen, dus maak dat het internet goed is. 
+Gebruik de `install_google_fonts.sh` script in deze repo. Het zal meer dan 1G fonts downloaden en installen, dus maak dat het internet goed is. 
 
-Ik heb nu een kelienere file gemaakt.
+Duizenden fonts maakt LibreOffice trager en neemt ruimte in de RAM. Daarom is het best om `install_common_fonts.sh` te gebruiken. 
 
 ## Veranderingen aan ppt zodat het automatisch speelt. 
 
-Dit hebben wij in de scripts die een gedeelte van deze repo zijn.
-
-Update_ppt.sh 
+`update_ppt.sh` runt een python script die alle automatische schakelingen tussen slides programmeerd. Deze packages zijn ook mogelijk interessant, maar meestal om warnings te vermijden. 
 
 ```
 sudo apt install net-tools
@@ -282,17 +276,15 @@ De 3.3V pin is pin 1, de GND is pin 6, en de I/O is pin 11.
 
 ![image](afbeeldingen/button_circuit.jpeg)
 
-## Stoppen van de automatisch ppt en de trekken van de nieuwe ppt van de google docs. 
-
-Dit gebruikt een script die niet op deze github staat, omdat het mijn acces waardes heeft. Dit is enkel local toegangkelijk (via USB). 
-
-## Automatisch service voor de knop copieren
+## Monitor_button.service opzetten
 ```
 sudo cp bosmuseum/projecten/automatisch_ppt/monitor_button.service /etc/systemd/system/monitor_button.service
 systemctl enable monitor_button
 systemctl daemon-reload
 systemctl start monitor_button
 ```
+
+### En voila!
 
 ## Ethernet stoppen om RPI sneller te laten booten
 
