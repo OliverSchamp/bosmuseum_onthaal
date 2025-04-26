@@ -5,7 +5,7 @@ import subprocess
 import time
 
 # GPIO pin setup
-BUTTON_PIN = 11  # Adjust to your chosen GPIO pin
+BUTTON_PIN = 13  # Adjust to your chosen GPIO pin
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 

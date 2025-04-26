@@ -16,6 +16,7 @@ def modify_presentation(file_path):
 
     # Open the presentation
     args = (PropertyValue("Hidden", 0, True, 0),)
+    print(file_path)
     doc = desktop.loadComponentFromURL(f"file://{file_path}", "_blank", 0, args)
 
     # Set slide transitions for all slides
@@ -47,5 +48,6 @@ if __name__ == "__main__":
         modify_presentation(file_path)
         print(f"Modified {file_path} successfully.")
     except UnoException as e:
+        print(f"Modified {file_path} unsuccessfully.")
         print(f"Error: {e}")
         sys.exit(1)
