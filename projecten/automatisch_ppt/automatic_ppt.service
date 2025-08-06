@@ -10,6 +10,8 @@ ExecStartPre=/bin/bash -c 'until xset q >/dev/null 2>&1; do sleep 1; done'
 ExecStartPre=/usr/bin/xhost +SI:localuser:dietpi
 ExecStart=/home/dietpi/bosmuseum_onthaal/projecten/automatisch_ppt/startup_scripts/automatic_ppt.sh
 User=dietpi
+TimeoutStartSec=600
+#Restart=always
 
 [Install]
 WantedBy=graphical.target
