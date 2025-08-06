@@ -234,6 +234,10 @@ Assuming:
 
 This should successfully download your Google Doc! Let me know if you run into issues.
 
+### Making sure the refresh token stays active
+
+After `sudo apt install anacron` update /etc/anacron with `5	7	pull_ppt_weekly	{path/to/pull_ppt.sh}`. Run `anacron -d -f -n` to confirm that this works.
+
 ### Installeren van fonts
 
 Gebruik de `install_google_fonts.sh` script in deze repo. Het zal meer dan 1G fonts downloaden en installen, dus maak dat het internet goed is. 
