@@ -236,7 +236,9 @@ This should successfully download your Google Doc! Let me know if you run into i
 
 ### Making sure the refresh token stays active
 
-After `sudo apt install anacron` update /etc/anacron with `5	7	pull_ppt_weekly	{path/to/pull_ppt.sh}`. Run `anacron -d -f -n` to confirm that this works.
+After `sudo apt install anacron` update /etc/anacrontab with `5	7	pull_ppt_weekly	{path/to/pull_ppt.sh}`. Run `anacron -d -f -n` to confirm that this works. 
+
+You can also access the log from the command line with `cat {path/to/pull_ppt.log}`.  
 
 ### Installeren van fonts
 
