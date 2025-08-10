@@ -88,11 +88,11 @@ sleep 1  # Give it a moment to fully terminate
 
 pkill -f libreoffice
 
-sleep 5
+sleep 1
 
 # Open the modified presentation (run as current user, not sudo)
-echo "Opening the modified presentation..."
-libreoffice --impress --norestore --show "$LOCAL_FILE" &
+#echo "Opening the modified presentation..."
+#libreoffice --impress --norestore --show "$LOCAL_FILE" &
 
 sudo systemctl restart automatic_ppt
 

@@ -4,7 +4,9 @@ After=multi-user.target
 
 [Service]
 Type=simple
+#ExecStartPre=/usr/bin/xhost +SI:localuser:root
 ExecStart=/usr/bin/python3 /home/dietpi/bosmuseum_onthaal/projecten/automatisch_ppt/monitor_button.py
+#Environment="DISPLAY=:0"
 Restart=always
 #User=dietpi  # Run as the dietpi user (or adjust as needed)
 

@@ -3,6 +3,11 @@
 import RPi.GPIO as GPIO
 import subprocess
 import time
+import tkinter as tk
+from threading import Thread
+import os
+
+os.environ['DISPLAY'] = ':0'
 
 # GPIO pin setup
 BUTTON_PIN = 13  # Adjust to your chosen GPIO pin
@@ -11,9 +16,11 @@ GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # Callback function to run the bash script
 def button_pressed():
-    print("Button pressed!")
+    display_cmd = ['sudo', '-u', 'dietpi', 'python3', '/home/dietpi/bosmuseum_onthaal/projecten/automatisch_ppt/display_message.py']
+    subprocess.Popen(display_cmd)  # Run in background so scripts can proceed
     subprocess.run(["/home/dietpi/bosmuseum_onthaal/projecten/automatisch_ppt/pull_ppt.sh"])
     subprocess.run(["/home/dietpi/bosmuseum_onthaal/projecten/automatisch_ppt/update_ppt_2.sh"])
+    subprocess.run(['sudo', '-u', 'dietpi', 'pkill', '-f', 'display_message.py'])
 
 # Detect rising edge (button press) with debounce
 #GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=button_pressed, bouncetime=300)
