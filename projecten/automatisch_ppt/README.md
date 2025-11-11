@@ -4,9 +4,11 @@
 
 Hier zijn instructies over hoe dat je deze automatische ppt speler zou opzetten in hardware en software. 
 
-![image](afbeeldingen/case_outside.HEIC) 
+![image](afbeeldingen/case_outside.jpeg) 
 
-![image](afbeeldingen/intro_img.HEIC) 
+![image](afbeeldingen/intro_img.jpeg) 
+
+Met veel dank aan **Theo Cominotto** voor de designs en de printen van de behuizing!!! 
 
 ## Installeren van DietPi OS
 
@@ -294,7 +296,7 @@ Gebruik de `monitor_button.service` start `monitor_button.py`. Hier kijken we of
 
 De 3.3V pin is pin 1, de GND is pin 6, en de I/O is pin 11.
 
-![image](afbeeldingen/button-circuit/inside_case.HEIC) 
+![image](afbeeldingen/button-circuit/inside_case.jpeg) 
 
 Het circuit en circuit board moeten zo groot zijn voor de behuizing: 
 
