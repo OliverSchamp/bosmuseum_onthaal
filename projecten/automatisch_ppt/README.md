@@ -350,3 +350,15 @@ DietPi’s default behavior is to wait for a network connection (like Ethernet) 
 DietPi uses `dhcpcd` to manage network interfaces, and by default, it waits for an Ethernet connection if it’s enabled. When no cable is detected, it times out (50 seconds in your case). Disabling Ethernet in `dietpi.txt` or shortening the timeout fixes this.
 
 Let me know if it works or if you need further tweaks!
+
+### OOM Vermijden
+
+Gedurende de spelen van de ppt, lekt geheugen een beetje. Eindelijk bouwt het op tot meer dan de RAM capaciteit. Om dit op te lossen moet je de SWAP verhogen met deze commando: 
+```
+/boot/dietpi/func/dietpi-set_swapfile 4096
+```
+De toestel moet ook rebooten elke 24 uur. Dit kan je opzetten met de volgende commandos: 
+```
+Sudo crontab -e 
+en dan scrhijf: 0 0 * * * /sbin/shutdown -r now
+```
