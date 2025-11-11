@@ -1,8 +1,16 @@
 # Automatisch PPT
 
+## Introductie
+
+Hier zijn instructies over hoe dat je deze automatische ppt speler zou opzetten in hardware en software. 
+
+![image](afbeeldingen/case_outside.HEIC) 
+
+![image](afbeeldingen/intro_img.HEIC) 
+
 ## Installeren van DietPi OS
 
-DietPi is een "lightweight" OS dat sneller runt dan de normale RPI OS. Om het te installeren moet je toegang hebben tot een andere computer om RPI Imager te installeren en gebruiken.
+DietPi is een "lightweight" OS dat sneller runt dan de normale RPI OS. Om het te installeren moet je toegang hebben tot een andere computer om RPI Imager te installeren en gebruiken. 
 
 ### Flashen op een andere Computer
 
@@ -126,7 +134,11 @@ De presentatie link heb je ergens. Dit gebruik je om de presentatie te downloade
 curl -L "https://docs.google.com/presentation/d/<GOOGLE_DOC_ID>/export/odp" -o /path/to/output_file.odp
 ```
 
-Maar hier moet je eerst authenticaten. Ga naar [google cloud console](console.cloud.google.com). Maak een nieuw project aan. 
+## Optioneel: Authenticatie
+
+Als de ppt beschermt is met een wachtwoord, of heeft een lijst van toegelaten accounts, moet je de curl commando aanpassen met verschillende "credentials". 
+
+Ga naar [google cloud console](console.cloud.google.com). Maak een nieuw project aan. 
 
 To download a Google Doc using `curl` with OAuth 2.0 authentication from the command line, you need to obtain an access token and include it in your `curl` request. Google Docs requires OAuth 2.0 for authentication when accessing private documents programmatically. Below is a step-by-step guide to authenticate and download the file: 
 
@@ -240,7 +252,9 @@ After `sudo apt install anacron` update /etc/anacrontab with `5	7	pull_ppt_weekl
 
 You can also access the log from the command line with `cat {path/to/pull_ppt.log}`.  
 
-### Installeren van fonts
+Now this should work, even for powerpoints that require a password to access. 
+
+## Installeren van fonts
 
 Gebruik de `install_google_fonts.sh` script in deze repo. Het zal meer dan 1G fonts downloaden en installen, dus maak dat het internet goed is. 
 
@@ -280,7 +294,21 @@ Gebruik de `monitor_button.service` start `monitor_button.py`. Hier kijken we of
 
 De 3.3V pin is pin 1, de GND is pin 6, en de I/O is pin 11.
 
-![image](afbeeldingen/button_circuit.jpeg)
+![image](afbeeldingen/button-circuit/inside_case.HEIC) 
+
+Het circuit en circuit board moeten zo groot zijn voor de behuizing: 
+
+![image](afbeeldingen/button-circuit/circuit_dimensions.jpeg) 
+
+Het circuit moet op deze foto's lijken: 
+
+![image](afbeeldingen/button-circuit/circuit_top.png) 
+
+![image](afbeeldingen/button-circuit/circuit_bottom.png) 
+
+## Maken van Behuizing - 3D printer nodig
+
+Kijk naar de files in de `3D-files` folder. Die kan je gebruiken om iets te wijzigen of de behuizing te 3D-printen. 
 
 ## Monitor_button.service opzetten
 ```
@@ -347,9 +375,7 @@ DietPi’s default behavior is to wait for a network connection (like Ethernet) 
   ```
 
 ### Why This Happens
-DietPi uses `dhcpcd` to manage network interfaces, and by default, it waits for an Ethernet connection if it’s enabled. When no cable is detected, it times out (50 seconds in your case). Disabling Ethernet in `dietpi.txt` or shortening the timeout fixes this.
-
-Let me know if it works or if you need further tweaks!
+DietPi uses `dhcpcd` to manage network interfaces, and by default, it waits for an Ethernet connection if it’s enabled. When no cable is detected, it times out (50 seconds in your case). Disabling Ethernet in `dietpi.txt` or shortening the timeout fixes this. 
 
 ### OOM Vermijden
 
@@ -361,4 +387,4 @@ De toestel moet ook rebooten elke 24 uur. Dit kan je opzetten met de volgende co
 ```
 Sudo crontab -e 
 en dan scrhijf: 0 0 * * * /sbin/shutdown -r now
-```
+``` 
