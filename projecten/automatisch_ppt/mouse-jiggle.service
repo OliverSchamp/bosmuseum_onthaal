@@ -1,0 +1,14 @@
+[Unit]
+Description=Simple Mouse Jiggler Service
+After=graphical.target
+
+[Service]
+Type=simple
+ExecStart=/home/dietpi/bosmuseum_onthaal/projecten/automatisch_ppt/mouse_jiggle.sh
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/dietpi/.Xauthority
+Restart=always
+User=dietpi
+
+[Install]
+WantedBy=graphical.target
